@@ -4,7 +4,7 @@ import type { SiteConfig } from "../types/config";
 const SITE_LANG = "zh_CN"; // 语言代码，例如：'en', 'zh_CN', 'ja' 等。
 
 export const siteConfig: SiteConfig = {
-	title: "Mizuki",
+	title: "Faruzan",
 	subtitle: "One demo website",
 	siteURL: "https://faruzan.pages.dev/", // 请替换为你的站点URL，以斜杠结尾
 	siteStartDate: "2026-06-20", // 站点开始运行日期，用于站点统计组件计算运行天数
