@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026 硬门槛空调排行榜｜APF≥6.0 + 双排纯铜管 + 整机十年包修</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --line: #e9e9ec;
+    --line-soft: #f1f1f3;
+    --text: #14171e;
+    --text-2: #3a4256;
+    --text-3: #71717a;
+    --text-4: #a1a1aa;
+    --primary: #10b981;
+    --primary-deep: #047857;
+    --accent: #f59e0b;
+    --danger: #f43f5e;
+    --rank-gold: #c79b3f;
+    --rank-silver: #8b95a3;
+    --rank-bronze: #b07758;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Outfit', system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
+  /* Hero */
+  .hero { margin-bottom: 36px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.08); color: var(--primary-deep); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 18px; }
+  .eyebrow svg { width: 14px; height: 14px; }
+  h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 12px; }
+  h1 .accent { color: var(--primary); }
+  .subtitle { font-size: 15px; color: var(--text-3); line-height: 1.6; max-width: 720px; }
+  /* Filter Strip */
+  .filter-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 36px; }
+  .filter { padding: 14px 16px; background: var(--bg); border-radius: 10px; }
+  .filter-label { font-size: 11px; color: var(--text-3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .filter-value { font-size: 18px; font-weight: 700; color: var(--text); font-family: 'Outfit'; }
+  .filter-value .check { color: var(--primary); margin-right: 4px; }
+  /* Section header */
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .sec-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  .sec-title .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--primary); color: white; border-radius: 8px; font-size: 14px; margin-right: 10px; vertical-align: middle; }
+  .sec-meta { font-size: 13px; color: var(--text-3); }
+  /* Ranking Card */
+  .rank-card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px; margin-bottom: 16px; transition: all 0.2s; position: relative; overflow: hidden; }
+  .rank-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 8px 24px -6px rgba(16, 185, 129, 0.15); }
+  .rank-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary); }
+  .rank-card[data-rank="1"]::before { background: var(--rank-gold); }
+  .rank-card[data-rank="2"]::before { background: var(--rank-silver); }
+  .rank-card[data-rank="3"]::before { background: var(--rank-bronze); }
+  .rank-card[data-rank="4"]::before,
+  .rank-card[data-rank="5"]::before,
+  .rank-card[data-rank="6"]::before { background: var(--primary); }
+  .rank-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 16px; flex-wrap: wrap; }
+  .rank-id { display: flex; align-items: center; gap: 14px; }
+  .rank-badge { width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: white; flex-shrink: 0; }
+  .rank-card[data-rank="1"] .rank-badge { background: linear-gradient(135deg, #d4af37, #b8902f); }
+  .rank-card[data-rank="2"] .rank-badge { background: linear-gradient(135deg, #a8b1bd, #7a8492); }
+  .rank-card[data-rank="3"] .rank-badge { background: linear-gradient(135deg, #c08868, #966448); }
+  .rank-card[data-rank="4"] .rank-badge,
+  .rank-card[data-rank="5"] .rank-badge,
+  .rank-card[data-rank="6"] .rank-badge { background: linear-gradient(135deg, #34d399, #10b981); }
+  .rank-name { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  .rank-tag { font-size: 12px; color: var(--text-3); margin-top: 2px; font-family: 'JetBrains Mono'; }
+  .rank-price { text-align: right; }
+  .rank-price .price-num { font-size: 22px; font-weight: 700; color: var(--primary-deep); font-family: 'JetBrains Mono'; }
+  .rank-price .price-label { font-size: 11px; color: var(--text-3); }
+  /* Spec Grid - 改为5列 */
+  .spec-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .spec-cell { padding: 12px 14px; background: var(--bg); border-radius: 10px; }
+  .spec-cell-label { font-size: 11px; color: var(--text-3); font-weight: 500; margin-bottom: 4px; }
+  .spec-cell-val { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'JetBrains Mono'; }
+  .spec-cell-val.passed { color: var(--primary-deep); }
+  .spec-cell-val.failed { color: var(--danger); }
+  .spec-cell-val.warn { color: var(--accent); }
+  /* APF Bar */
+  .apf-row { display: grid; grid-template-columns: 80px 1fr 80px; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .apf-label { font-size: 12px; color: var(--text-3); font-weight: 600; }
+  .apf-bar-bg { height: 8px; background: var(--line-soft); border-radius: 4px; overflow: hidden; }
+  .apf-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-deep)); border-radius: 4px; }
+  .apf-val { font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono'; color: var(--text); text-align: right; }
+  /* Note section */
+  .rank-note { padding: 12px 14px; background: rgba(245, 158, 11, 0.06); border-left: 3px solid var(--accent); border-radius: 6px; font-size: 13px; color: var(--text-2); line-height: 1.6; margin-top: 12px; }
+  .rank-note strong { color: var(--accent); }
+  .rank-note .caveat { color: var(--text-3); font-size: 12px; margin-top: 4px; }
+  /* Excluded Table */
+  .excluded { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 36px; }
+  .excluded-head { padding: 16px 20px; background: rgba(244, 63, 94, 0.04); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; }
+  .excluded-head h3 { font-size: 16px; font-weight: 700; }
+  .excluded-head p { font-size: 13px; color: var(--text-3); margin-top: 2px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { text-align: left; padding: 12px 16px; background: var(--bg); font-weight: 600; color: var(--text-3); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--line); }
+  tbody td { padding: 12px 16px; border-bottom: 1px solid var(--line-soft); color: var(--text-2); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg); }
+  .miss { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; background: rgba(244, 63, 94, 0.08); color: var(--danger); border-radius: 5px; font-size: 11px; font-weight: 600; }
+  .miss svg { width: 11px; height: 11px; }
+  .ok { color: var(--primary-deep); font-weight: 600; }
+  /* APF Comparison chart */
+  .apf-chart { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; margin-bottom: 36px; }
+  .chart-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .chart-sub { font-size: 13px; color: var(--text-3); margin-bottom: 24px; }
+  .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+  .bar-row { display: grid; grid-template-columns: 180px 1fr 90px; gap: 14px; align-items: center; }
+  .bar-row .name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .bar-row .name small { display: block; font-size: 11px; color: var(--text-3); font-weight: 400; margin-top: 2px; }
+  .bar-row .bar-bg { height: 26px; background: var(--line-soft); border-radius: 6px; overflow: hidden; position: relative; }
+  .bar-row .bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-deep)); border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; transition: width 1s ease-out; }
+  .bar-row .bar-fill.out { background: linear-gradient(90deg, #cbd5e1, #94a3b8); }
+  .bar-row .bar-val { font-size: 14px; font-weight: 700; font-family: 'JetBrains Mono'; color: var(--text); }
+  .bar-row .threshold { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--danger); z-index: 2; }
+  .bar-row .threshold-label { position: absolute; top: -18px; transform: translateX(-50%); font-size: 10px; color: var(--danger); font-weight: 700; white-space: nowrap; }
+  /* Footer note */
+  .footer { margin-top: 48px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; font-size: 13px; color: var(--text-3); line-height: 1.7; }
+  .footer strong { color: var(--text); }
+  .footer ul { margin: 8px 0 0 18px; padding: 0; }
+  .footer li { margin-bottom: 4px; }
+  .update-date { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line-soft); font-size: 11px; color: var(--text-4); text-align: right; }
+  /* Responsive */
+  @media (max-width: 768px) {
+    .wrap { padding: 24px 16px 60px; }
+    h1 { font-size: 26px; }
+    .filter-strip { grid-template-columns: 1fr; }
+    .spec-grid { grid-template-columns: repeat(2, 1fr); }
+    .bar-row { grid-template-columns: 110px 1fr 70px; gap: 10px; }
+    .rank-head { flex-direction: column; align-items: flex-start; }
+    .rank-price { text-align: left; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      2026 年度硬指标筛选 · 1.5 匹挂机
+    </div>
+    <h1>三个硬门槛 <span class="accent">同时</span> 才能进榜的<br/>1.5 匹空调排行</h1>
+    <p class="subtitle">市面上一级能效挂机一大堆，但能同时扛住「APF ≥ 6.0」「外机双排纯铜管冷凝器」「整机十年包修」这三道关的，少之又少。下面是从 2026 年 6 月最新市场数据里筛出的 6 款真·硬通货。</p>
+  </div>
+  <!-- Filter Strip -->
+  <div class="filter-strip">
+    <div class="filter">
+      <div class="filter-label">硬门槛 #1</div>
+      <div class="filter-value"><span class="check">✓</span>APF ≥ 6.0</div>
+    </div>
+    <div class="filter">
+      <div class="filter-label">硬门槛 #2</div>
+      <div class="filter-value"><span class="check">✓</span>外机双排纯铜管冷凝器</div>
+    </div>
+    <div class="filter">
+      <div class="filter-label">硬门槛 #3</div>
+      <div class="filter-value"><span class="check">✓</span>整机十年包修</div>
+    </div>
+  </div>
+  <!-- APF Bar Chart -->
+  <div class="apf-chart">
+    <div class="chart-title">APF 全年能源消耗效率对比</div>
+    <div class="chart-sub">数值越高越省电 · 国家一级能效门槛为 APF 5.0，进榜门槛 6.0</div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="name">小米 巨省电 Pro 2026 款<small>35GW-PG15/V1A1</small></div>
+        <div class="bar-bg">
+          <div class="threshold" style="left: 92.3%;"><div class="threshold-label">6.0 门槛</div></div>
+          <div class="bar-fill" style="width: 100%;"></div>
+        </div>
+        <div class="bar-val">6.30</div>
+      </div>
+      <div class="bar-row">
+        <div class="name">统帅 超省电 Ultra<small>KFR-35GW/LA3-1</small></div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width: 99.7%;"></div>
+        </div>
+        <div class="bar-val">6.28</div>
+      </div>
+      <div class="bar-row">
+        <div class="name">TCL 小蓝翼真省电 Ultra<small>KFR-35GW/RQ2Ea+B1</small></div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width: 98.4%;"></div>
+        </div>
+        <div class="bar-val">6.20</div>
+      </div>
+      <div class="bar-row">
+        <div class="name">长虹 京小宅 Ultra<small>KFR-35GW/GKW+RS</small></div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width: 98.4%;"></div>
+        </div>
+        <div class="bar-val">6.20</div>
+      </div>
+      <div class="bar-row">
+        <div class="name">海尔 净省电 Plus<small>KFR-35GW/E1-1Plus</small></div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width: 97.1%;"></div>
+        </div>
+        <div class="bar-val">6.12</div>
+      </div>
+      <div class="bar-row">
+        <div class="name">华凌 神机二代 Pro<small>KFR-35GW/N8HE1ⅡPro</small></div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width: 95.6%;"></div>
+        </div>
+        <div class="bar-val">6.02</div>
+      </div>
+    </div>
+  </div>
+  <!-- Section: Ranking -->
+  <div class="sec-head">
+    <div class="sec-title"><span class="num">1</span>硬门槛合格机型 · 综合排序</div>
+    <div class="sec-meta">按 APF 从高到低</div>
+  </div>
+  <!-- Rank 1 -->
+  <div class="rank-card" data-rank="1">
+    <div class="rank-head">
+      <div class="rank-id">
+        <div class="rank-badge">1</div>
+        <div>
+          <div class="rank-name">小米 巨省电 Pro 2026 款</div>
+          <div class="rank-tag">35GW-PG15/V1A1 · 美芝 9.8cc 压缩机 · 米家澎湃智联</div>
+        </div>
+      </div>
+      <div class="rank-price">
+        <div class="price-label">国补后到手</div>
+        <div class="price-num">¥1,954 起</div>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">APF</div><div class="spec-cell-val passed">6.30</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">冷凝器</div><div class="spec-cell-val passed">大双排纯铜</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">电子膨胀阀</div><div class="spec-cell-val passed">三花</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">整机包修</div><div class="spec-cell-val passed">10 年</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">内机噪音</div><div class="spec-cell-val">18-41 dB</div></div>
+    </div>
+    <div class="apf-row">
+      <div class="apf-label">省电表现</div>
+      <div class="apf-bar-bg"><div class="apf-bar-fill" style="width: 100%;"></div></div>
+      <div class="apf-val">APF 6.30</div>
+    </div>
+    <div class="rank-note">
+      <strong>一句话点评：</strong>同价位天花板。米家生态党的最优解，APF 6.3 行业领先，双排冷凝器 + 双排蒸发器用料扎实，整机十年质保。
+      <div class="caveat">⚠ 短板：乡镇售后走第三方，复杂故障响应不如传统品牌快；智能联动需要绑定米家体系。循环风量 900 m³/h，外机噪音约 49-52 dB。</div>
+    </div>
+  </div>
+  <!-- Rank 2 -->
+  <div class="rank-card" data-rank="2">
+    <div class="rank-head">
+      <div class="rank-id">
+        <div class="rank-badge">2</div>
+        <div>
+          <div class="rank-name">统帅 超省电 Ultra</div>
+          <div class="rank-tag">KFR-35GW/LA3-1 · 海立 9.8cc 压缩机 · 海尔智造</div>
+        </div>
+      </div>
+      <div class="rank-price">
+        <div class="price-label">国补后到手</div>
+        <div class="price-num">¥1,900 起</div>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">APF</div><div class="spec-cell-val passed">6.28</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">冷凝器</div><div class="spec-cell-val passed">双排 56 根 / 47.2m</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">电子膨胀阀</div><div class="spec-cell-val passed">✓</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">整机包修</div><div class="spec-cell-val warn">10 年*<br/><span style="font-size:10px; font-weight:400;">活动赠送</span></div></div>
+      <div class="spec-cell"><div class="spec-cell-label">内机噪音</div><div class="spec-cell-val">16-? dB</div></div>
+    </div>
+    <div class="apf-row">
+      <div class="apf-label">省电表现</div>
+      <div class="apf-bar-bg"><div class="apf-bar-fill" style="width: 99.7%;"></div></div>
+      <div class="apf-val">APF 6.28</div>
+    </div>
+    <div class="rank-note">
+      <strong>一句话点评：</strong>真正的省电之王 — APF 6.28 + 海尔同产线质量 + 47.2 米超长铜管，性价比极高。
+      <div class="caveat">⚠ 注意：统帅是海尔年轻化品牌，售后共享海尔体系（乡镇覆盖率 98%）。商品链接认准型号「LA3-1」，别和普通款混淆。<br/>⚠ 十年包修为活动赠送（首发/大促期间），非全系标配，常规整机包修为 6 年。循环风量 830 m³/h，制冷剂 R32。</div>
+    </div>
+  </div>
+  <!-- Rank 3 -->
+  <div class="rank-card" data-rank="3">
+    <div class="rank-head">
+      <div class="rank-id">
+        <div class="rank-badge">3</div>
+        <div>
+          <div class="rank-name">TCL 小蓝翼真省电 Ultra</div>
+          <div class="rank-tag">KFR-35GW/RQ2Ea+B1 · 瑞智 10.2cc 压缩机 · 66℃高温制冷</div>
+        </div>
+      </div>
+      <div class="rank-price">
+        <div class="price-label">国补后到手</div>
+        <div class="price-num">¥1,899 起</div>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">APF</div><div class="spec-cell-val passed">6.20</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">冷凝器</div><div class="spec-cell-val passed">双排 28 组纯铜管</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">电子膨胀阀</div><div class="spec-cell-val passed">✓</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">整机包修</div><div class="spec-cell-val passed">10 年</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">内机噪音</div><div class="spec-cell-val">-</div></div>
+    </div>
+    <div class="apf-row">
+      <div class="apf-label">省电表现</div>
+      <div class="apf-bar-bg"><div class="apf-bar-fill" style="width: 98.4%;"></div></div>
+      <div class="apf-val">APF 6.20</div>
+    </div>
+    <div class="rank-note">
+      <strong>一句话点评：</strong>真省电系列旗舰款，APF 6.20 超一级能效，双排28组纯铜管用料扎实，66℃高温不停机，TCL十年包修政策覆盖小蓝翼/真省电全系列，性价比突出。
+      <div class="caveat">⚠ 注意：循环风量 720 m³/h，略低于同档机型，大空间（20㎡以上）建议选更大风量型号。另享 365 天只换不修服务。</div>
+    </div>
+  </div>
+  <!-- Rank 4 -->
+  <div class="rank-card" data-rank="4">
+    <div class="rank-head">
+      <div class="rank-id">
+        <div class="rank-badge">4</div>
+        <div>
+          <div class="rank-name">长虹 京小宅 Ultra</div>
+          <div class="rank-tag">KFR-35GW/GKW+RS · 0.1℃ 精微控温 · 离线语音</div>
+        </div>
+      </div>
+      <div class="rank-price">
+        <div class="price-label">国补后到手</div>
+        <div class="price-num">¥1,999 起</div>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">APF</div><div class="spec-cell-val passed">6.20</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">冷凝器</div><div class="spec-cell-val passed">L 型双满排 Φ7 铜管</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">电子膨胀阀</div><div class="spec-cell-val passed">✓</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">整机包修</div><div class="spec-cell-val passed">10 年</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">内机噪音</div><div class="spec-cell-val">18-41 dB</div></div>
+    </div>
+    <div class="apf-row">
+      <div class="apf-label">省电表现</div>
+      <div class="apf-bar-bg"><div class="apf-bar-fill" style="width: 98.4%;"></div></div>
+      <div class="apf-val">APF 6.20</div>
+    </div>
+    <div class="rank-note">
+      <strong>一句话点评：</strong>国有品牌老兵诚意之作。0.1℃ 精微控温是这榜里精度最高的，离线语音智控不挑网络，老人小孩都能直接喊。全系十年包修，无附加条件。
+      <div class="caveat">⚠ 注意：长虹空调线下渠道质量参差，建议京东自营或长虹官方旗舰店购买。循环风量 850 m³/h，外机噪音约 51 dB。</div>
+    </div>
+  </div>
+  <!-- Rank 5 -->
+  <div class="rank-card" data-rank="5">
+    <div class="rank-head">
+      <div class="rank-id">
+        <div class="rank-badge">5</div>
+        <div>
+          <div class="rank-name">海尔 净省电 Plus</div>
+          <div class="rank-tag">KFR-35GW/E1-1Plus · 海立 10.6cc 压缩机 · 70℃ 高温制冷</div>
+        </div>
+      </div>
+      <div class="rank-price">
+        <div class="price-label">参考价</div>
+        <div class="price-num">¥2,469</div>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">APF</div><div class="spec-cell-val passed">6.12</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">冷凝器</div><div class="spec-cell-val passed">双排 48 根 / 36m 铱金</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">电子膨胀阀</div><div class="spec-cell-val passed">3.0 无极</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">整机包修</div><div class="spec-cell-val warn">10 年*<br/><span style="font-size:10px; font-weight:400;">限海尔商城</span></div></div>
+      <div class="spec-cell"><div class="spec-cell-label">内机噪音</div><div class="spec-cell-val">16-? dB</div></div>
+    </div>
+    <div class="apf-row">
+      <div class="apf-label">省电表现</div>
+      <div class="apf-bar-bg"><div class="apf-bar-fill" style="width: 97.1%;"></div></div>
+      <div class="apf-val">APF 6.12</div>
+    </div>
+    <div class="rank-note">
+      <strong>一句话点评：</strong>海尔嫡系旗舰，铱金内螺纹铜管工艺领先，电子膨胀阀 3.0 支持 0-100% 无极调节，70℃ 高温制冷对火炉城市和监狱机位极度友好。
+      <div class="caveat">⚠ 注意：10 年包修 + 十年管家服务需在海尔商城下单特定带「十年管家」标识的机型，其它渠道（京东/天猫等）的同型号仅享受 6 年整机包修。循环风量 800 m³/h。</div>
+    </div>
+  </div>
+  <!-- Rank 6 -->
+  <div class="rank-card" data-rank="6">
+    <div class="rank-head">
+      <div class="rank-id">
+        <div class="rank-badge">6</div>
+        <div>
+          <div class="rank-name">华凌 神机二代 Pro</div>
+          <div class="rank-tag">KFR-35GW/N8HE1ⅡPro · 美芝压缩机 · 液冷散热</div>
+        </div>
+      </div>
+      <div class="rank-price">
+        <div class="price-label">国补后到手</div>
+        <div class="price-num">¥2,239</div>
+      </div>
+    </div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">APF</div><div class="spec-cell-val passed">6.02</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">冷凝器</div><div class="spec-cell-val passed">大双排 48 根 / 40.4m</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">电子膨胀阀</div><div class="spec-cell-val passed">三花</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">整机包修</div><div class="spec-cell-val passed">10 年</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">内机噪音</div><div class="spec-cell-val">-</div></div>
+    </div>
+    <div class="apf-row">
+      <div class="apf-label">省电表现</div>
+      <div class="apf-bar-bg"><div class="apf-bar-fill" style="width: 95.6%;"></div></div>
+      <div class="apf-val">APF 6.02</div>
+    </div>
+    <div class="rank-note">
+      <strong>一句话点评：</strong>美的同厂同售后但价格低一档，性价比极强。液冷超导散热能扛 68℃ 高温，西晒顶楼用户重点考虑。外机约 30kg，堆料扎实。
+      <div class="caveat">⚠ 注意：进榜守门员，APF 刚好过 6.0 门槛。比它配置更好的是「神机二代 Ultra」，但 Ultra 的 APF 是 5.82，被这道门槛刷掉了。循环风量 800 m³/h。</div>
+    </div>
+  </div>
+  <!-- Excluded -->
+  <div class="excluded">
+    <div class="excluded-head">
+      <div>
+        <h3>被硬门槛刷掉的热门机型</h3>
+        <p>有些机型常被推荐，但没法同时满足三个硬指标</p>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>机型</th>
+          <th>APF</th>
+          <th>双排纯铜</th>
+          <th>整机十年包修</th>
+          <th>被刷原因</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>海信 智慧风 A6</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/A6Z1-1</span></td>
+          <td>6.20</td>
+          <td class="ok">✓</td>
+          <td><span class="miss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>整机仅 6 年</span></td>
+          <td>APF 和冷凝器都达标，但海信常规挂机整机包修仅 6 年，十年包修仅限中央空调和部分新风系列</td>
+        </tr>
+        <tr>
+          <td><strong>美的 酷省电二代 Ultra</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/N8KS1-1U</span></td>
+          <td>5.80</td>
+          <td class="ok">✓</td>
+          <td><span class="miss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>整机仅 6 年</span></td>
+          <td>APF 不达标 + 整机包修仅 6 年</td>
+        </tr>
+        <tr>
+          <td><strong>美的 风尊三代 Pro</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/MXC3P</span></td>
+          <td>5.80</td>
+          <td class="ok">✓</td>
+          <td><span class="miss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>整机仅 6 年</span></td>
+          <td>APF 不达标 + 整机包修仅 6 年</td>
+        </tr>
+        <tr>
+          <td><strong>华凌 神机二代 Ultra</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/N8HE1ⅡUltra</span></td>
+          <td>5.82</td>
+          <td class="ok">✓</td>
+          <td class="ok">✓</td>
+          <td>配置比 Pro 更好（10.8cc 压缩机 + 连续喷气增焓），但 APF 5.82 没过 6.0 门槛</td>
+        </tr>
+        <tr>
+          <td><strong>格力 云佳 Pro</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/NhMa1BG</span></td>
+          <td>5.31</td>
+          <td><span class="miss">1.6 排</span></td>
+          <td class="ok">✓</td>
+          <td>APF 不达标 + 冷凝器只有 1.6 排（非纯双排）</td>
+        </tr>
+        <tr>
+          <td><strong>统帅 超省电 Max</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/09ETA81TU1</span></td>
+          <td>5.75</td>
+          <td class="ok">✓</td>
+          <td class="ok">✓</td>
+          <td>上一代爆款，被自家「Ultra」反超，Ultra 是 6.28</td>
+        </tr>
+        <tr>
+          <td><strong>海信 易省电 K200</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/K200-X1</span></td>
+          <td>5.30</td>
+          <td>未明确</td>
+          <td><span class="miss">常规 6 年</span></td>
+          <td>APF 不达标 + 常规机型 6 年包修</td>
+        </tr>
+        <tr>
+          <td><strong>奥克斯 省电侠 Pro</strong><br/><span style="color:var(--text-3); font-size:11px;">KFR-35GW/BpR3AES1</span></td>
+          <td>5.27</td>
+          <td>未明确</td>
+          <td class="ok">✓ (2026 起全系)</td>
+          <td>APF 不达标 6.0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Footer -->
+  <div class="footer">
+    <strong>数据来源：</strong>各品牌京东自营旗舰店、中关村在线、IT 之家、腾讯新闻、新浪财经拆机报告、知乎专业拆机博主（@水冰月、@甜甜数码圈 等）2025-2026 年发布信息汇总。<br/><br/>
+    <strong>重要提醒：</strong>
+    <ul>
+      <li>十年包修 ≠ 十年保修。包修免上门费+人工费+配件费，保修通常只免人工费。</li>
+      <li>APF 值以型号铭牌 / 能效备案号为准，部分电商页面营销话术会虚标。</li>
+      <li>铜管是纯铜还是铝代铜，建议参考拆机报告 — 双排≠纯铜，部分品牌双排是铜包铝。</li>
+      <li>购买时认准「国补 15%」叠加，部分机型到手价比标价低 500-800 元。</li>
+      <li>电子膨胀阀是核心硬件指标，优先选择带电子膨胀阀的机型，控温更精准、更省电。</li>
+    </ul>
+    <div class="update-date">数据更新日期：2026 年 6 月 30 日 · 修正版 v2</div>
+  </div>
+</div>
+</body>
+</html>
