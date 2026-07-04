@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年7月全球AI大模型TOP80排行榜</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --hover: #f1f5f9;
+  --primary: #3b82f6;
+  --t0: #f59e0b;
+  --t1: #3b82f6;
+  --t2: #10b981;
+  --t3: #f97316;
+  --t4: #6b7280;
+  --opensource: #10b981;
+  --closed: #ef4444;
+  --partial: #8b5cf6;
+  --restricted: #f59e0b;
+}
+
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border: #334155;
+  --hover: #334155;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.container { max-width: 1400px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.controls {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.search-box::before {
+  content: "🔍";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+}
+
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-group select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.theme-toggle {
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.theme-toggle:hover { background: var(--hover); }
+
+.table-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 1200px;
+}
+
+th {
+  background: var(--hover);
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+th:hover { background: var(--border); }
+
+th.sortable::after {
+  content: " ↕";
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+th.sort-asc::after { content: " ↑"; opacity: 1; color: var(--primary); }
+th.sort-desc::after { content: " ↓"; opacity: 1; color: var(--primary); }
+
+td {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: var(--hover); }
+tbody tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+[data-theme="dark"] tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+.rank {
+  font-weight: 700;
+  text-align: center;
+  width: 50px;
+}
+
+.rank-1 { color: #f59e0b; }
+.rank-2 { color: #9ca3af; }
+.rank-3 { color: #cd7f32; }
+
+.model-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.vendor {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-t0 { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+.badge-t1 { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
+.badge-t2 { background: rgba(16, 185, 129, 0.15); color: #059669; }
+.badge-t3 { background: rgba(249, 115, 22, 0.15); color: #ea580c; }
+.badge-t4 { background: rgba(107, 114, 128, 0.15); color: #4b5563; }
+
+.badge-opensource { background: rgba(16, 185, 129, 0.15); color: #059669; }
+.badge-closed { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+.badge-partial { background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
+.badge-restricted { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+
+.badge-yes { background: rgba(16, 185, 129, 0.15); color: #059669; }
+.badge-no { background: rgba(107, 114, 128, 0.15); color: #4b5563; }
+.badge-optional { background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
+
+.score {
+  font-weight: 600;
+  font-family: 'SF Mono', Monaco, monospace;
+  text-align: center;
+}
+
+.price {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.highlight {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  max-width: 300px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  header h1 { font-size: 1.5rem; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat-number { font-size: 1.5rem; }
+  .controls { flex-direction: column; }
+  .search-box { width: 100%; }
+  .filter-group { width: 100%; }
+  .filter-group select { flex: 1; min-width: 120px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🚀 2026年7月全球AI大模型TOP80排行榜</h1>
+    <p>排序规则：MT-Bench（满分10）降序 · 仅保留最新版模型 · 已剔除旧版本/实验模型</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-number" id="totalCount">80</div>
+      <div class="stat-label">总模型数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="domesticCount">0</div>
+      <div class="stat-label">国产模型</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="opensourceCount">0</div>
+      <div class="stat-label">开源模型</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="multimodalCount">0</div>
+      <div class="stat-label">多模态模型</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索模型名称或厂商...">
+    </div>
+    <div class="filter-group">
+      <select id="opensourceFilter">
+        <option value="all">全部开源状态</option>
+        <option value="闭源">仅闭源</option>
+        <option value="开源">仅开源</option>
+        <option value="商用受限">商用受限</option>
+      </select>
+      <select id="multimodalFilter">
+        <option value="all">全部多模态</option>
+        <option value="是">支持多模态</option>
+        <option value="否">仅文本</option>
+      </select>
+      <select id="tierFilter">
+        <option value="all">全部梯队</option>
+        <option value="T0">T0 旗舰 (≥9.0)</option>
+        <option value="T1">T1 高端 (8.3-8.99)</option>
+        <option value="T2">T2 中端 (7.5-8.29)</option>
+        <option value="T3">T3 轻量化 (6.0-7.49)</option>
+        <option value="T4">T4 端侧 (<6.0)</option>
+      </select>
+    </div>
+    <button class="theme-toggle" id="themeToggle" title="切换主题">🌓</button>
+  </div>
+
+  <div class="table-container">
+    <table id="rankingTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-sort="rank">排名</th>
+          <th>模型名称</th>
+          <th>厂商</th>
+          <th>开源状态</th>
+          <th class="sortable" data-sort="context">上下文</th>
+          <th>多模态</th>
+          <th class="sortable" data-sort="mmlu">MMLU</th>
+          <th class="sortable" data-sort="ceval">C-Eval</th>
+          <th class="sortable" data-sort="mtbench">MT-Bench</th>
+          <th class="sortable" data-sort="priceIn">输入价</th>
+          <th class="sortable" data-sort="priceOut">输出价</th>
+          <th>核心亮点</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    数据更新：2026年7月 · 共80款最新版模型 · 按MT-Bench综合排序
+  </footer>
+</div>
+
+<script>
+const data = [
+  {rank:1,name:"GPT-5.6 Sol",vendor:"OpenAI",opensource:"否",context:"2M",multimodal:"是",mmlu:94.1,ceval:76.3,mtbench:9.58,priceIn:5.0,priceOut:30.0,highlight:"OpenAI当前最新旗舰，智能体+视频多模态全能",domestic:false},
+  {rank:2,name:"Claude Fable 5",vendor:"Anthropic",opensource:"否",context:"200K",multimodal:"是",mmlu:93.8,ceval:75.1,mtbench:9.52,priceIn:4.0,priceOut:22.0,highlight:"Anthropic最新代码旗舰，SWE-bench行业第一",domestic:false},
+  {rank:3,name:"Gemini 3.1 Pro",vendor:"Google",opensource:"否",context:"2M",multimodal:"是",mmlu:91.5,ceval:72.6,mtbench:9.31,priceIn:2.5,priceOut:12.0,highlight:"谷歌最新原生视频多模态大模型，2M超长上下文",domestic:false},
+  {rank:4,name:"Claude Opus 4.8 Thinking",vendor:"Anthropic",opensource:"否",context:"200K",multimodal:"是",mmlu:90.6,ceval:74.8,mtbench:9.26,priceIn:3.2,priceOut:16.0,highlight:"Opus系列最新增强思考版，学术法律文档专用",domestic:false},
+  {rank:5,name:"Claude Sonnet 5",vendor:"Anthropic",opensource:"否",context:"200K",multimodal:"是",mmlu:89.7,ceval:73.5,mtbench:9.20,priceIn:2.0,priceOut:10.0,highlight:"Sonnet最新一代中端商用旗舰",domestic:false},
+  {rank:6,name:"Grok 4.1 Thinking",vendor:"xAI",opensource:"否",context:"1M",multimodal:"是",mmlu:88.6,ceval:68.2,mtbench:9.15,priceIn:1.8,priceOut:9.0,highlight:"xAI最新实时联网推理模型",domestic:false},
+  {rank:7,name:"Qwen3.7 Max",vendor:"阿里",opensource:"部分开源",context:"1M",multimodal:"是",mmlu:87.3,ceval:89.6,mtbench:9.12,priceIn:0.8,priceOut:3.2,highlight:"通义千问当前闭源顶配，中文能力全球顶尖",domestic:true},
+  {rank:8,name:"GLM-5.2 Max",vendor:"智谱AI",opensource:"MIT开源",context:"1M",multimodal:"是",mmlu:86.9,ceval:88.7,mtbench:9.08,priceIn:0.7,priceOut:2.9,highlight:"智谱最新全能力旗舰，信创私有化首选",domestic:true},
+  {rank:9,name:"MiMo V2.5 Pro",vendor:"小米",opensource:"否",context:"1M",multimodal:"是",mmlu:86.8,ceval:89.1,mtbench:9.05,priceIn:0.65,priceOut:2.6,highlight:"小米最新人车家一体化多模态模型",domestic:true},
+  {rank:10,name:"MiniMax M3-VL",vendor:"稀宇科技",opensource:"否",context:"256K",multimodal:"是",mmlu:84.2,ceval:87.5,mtbench:9.01,priceIn:0.6,priceOut:2.4,highlight:"MiniMax最新语音数字人多模态旗舰",domestic:true},
+  {rank:11,name:"DeepSeek V4 Pro",vendor:"深度求索",opensource:"MIT开源",context:"1M",multimodal:"否",mmlu:86.7,ceval:90.0,mtbench:8.97,priceIn:0.435,priceOut:0.87,highlight:"深度求索最新数学推理开源旗舰",domestic:true},
+  {rank:12,name:"Kimi K2.6",vendor:"月之暗面",opensource:"否",context:"2M",multimodal:"是",mmlu:85.9,ceval:88.3,mtbench:8.94,priceIn:0.52,priceOut:1.9,highlight:"月之暗面最新超长上下文商用模型",domestic:true},
+  {rank:13,name:"Qwen3 Max Open",vendor:"阿里",opensource:"Apache2.0",context:"262K",multimodal:"是",mmlu:85.8,ceval:89.2,mtbench:8.91,priceIn:0.35,priceOut:1.2,highlight:"阿里最新开源通用多模态基座",domestic:true},
+  {rank:14,name:"GLM-5.2 Open",vendor:"智谱AI",opensource:"MIT开源",context:"1M",multimodal:"是",mmlu:85.3,ceval:88.5,mtbench:8.86,priceIn:0.32,priceOut:1.1,highlight:"智谱最新开源完整权重模型",domestic:true},
+  {rank:15,name:"文心一言5.1",vendor:"百度",opensource:"否",context:"128K",multimodal:"是",mmlu:82.1,ceval:86.3,mtbench:8.85,priceIn:0.5,priceOut:2.0,highlight:"百度文心当前最新商用版本",domestic:true},
+  {rank:16,name:"Seed 2.1 Pro",vendor:"字节跳动",opensource:"否",context:"512K",multimodal:"是",mmlu:84.7,ceval:88.1,mtbench:8.82,priceIn:0.55,priceOut:2.1,highlight:"字节最新自研多模态商用模型",domestic:true},
+  {rank:17,name:"星火V5",vendor:"科大讯飞",opensource:"否",context:"128K",multimodal:"是",mmlu:81.5,ceval:85.9,mtbench:8.79,priceIn:0.45,priceOut:1.8,highlight:"讯飞最新语音教育一体化旗舰",domestic:true},
+  {rank:18,name:"Llama 3.3 70B Instruct",vendor:"Meta",opensource:"商用受限",context:"128K",multimodal:"可选VL",mmlu:86.0,ceval:63.1,mtbench:8.70,priceIn:0.9,priceOut:3.6,highlight:"Meta最新一代70B微调开源模型",domestic:false},
+  {rank:19,name:"DeepSeek V4 Flash",vendor:"深度求索",opensource:"MIT开源",context:"128K",multimodal:"否",mmlu:82.4,ceval:87.1,mtbench:8.62,priceIn:0.14,priceOut:0.30,highlight:"V4系列最新高速轻量化开源模型",domestic:true},
+  {rank:20,name:"InternLM2.5 20B Chat",vendor:"上海AI实验室",opensource:"Apache2.0",context:"128K",multimodal:"是",mmlu:81.8,ceval:86.7,mtbench:8.57,priceIn:0.38,priceOut:1.3,highlight:"书生大模型最新20B通用开源版本",domestic:true},
+  {rank:21,name:"Mistral Large 3.1",vendor:"Mistral",opensource:"闭源商用",context:"128K",multimodal:"是",mmlu:76.5,ceval:60.1,mtbench:8.31,priceIn:1.1,priceOut:4.2,highlight:"Mistral欧洲最新旗舰闭源模型",domestic:false},
+  {rank:22,name:"Gemma 3 27B IT",vendor:"Google",opensource:"Gemma协议",context:"130K",multimodal:"是",mmlu:78.5,ceval:61.2,mtbench:8.38,priceIn:0.85,priceOut:3.1,highlight:"谷歌最新一代开源多模态模型",domestic:false},
+  {rank:23,name:"Baichuan4 Ultra",vendor:"百川智能",opensource:"否",context:"128K",multimodal:"是",mmlu:80.2,ceval:85.8,mtbench:8.22,priceIn:0.48,priceOut:1.7,highlight:"百川当前顶配商用模型",domestic:true},
+  {rank:24,name:"Phi-4 Medium",vendor:"微软",opensource:"MIT开源",context:"128K",multimodal:"否",mmlu:79.0,ceval:65.3,mtbench:8.18,priceIn:0.75,priceOut:2.8,highlight:"微软最新通用轻量推理开源模型",domestic:false},
+  {rank:25,name:"Mistral Medium 3.5",vendor:"Mistral",opensource:"Apache2.0",context:"128K",multimodal:"是",mmlu:77.1,ceval:59.8,mtbench:8.12,priceIn:0.68,priceOut:2.5,highlight:"Mistral最新合规企业级开源模型",domestic:false},
+  {rank:26,name:"360智脑4.0 Max",vendor:"三六零",opensource:"否",context:"128K",multimodal:"是",mmlu:78.6,ceval:84.9,mtbench:8.07,priceIn:0.42,priceOut:1.5,highlight:"360最新安全领域商用大模型",domestic:true},
+  {rank:27,name:"Llama 3.2 40B Instruct",vendor:"Meta",opensource:"商用受限",context:"128K",multimodal:"可选VL",mmlu:77.5,ceval:60.7,mtbench:8.02,priceIn:0.78,priceOut:2.9,highlight:"Meta最新40B中等尺寸开源微调模型",domestic:false},
+  {rank:28,name:"Qwen3-14B Instruct",vendor:"阿里",opensource:"Apache2.0",context:"256K",multimodal:"是",mmlu:79.8,ceval:86.9,mtbench:7.96,priceIn:0.22,priceOut:0.7,highlight:"Qwen3系列最新14B中端开源多模态",domestic:true},
+  {rank:29,name:"DeepSeek-R1-Distill-14B",vendor:"深度求索",opensource:"MIT开源",context:"128K",multimodal:"否",mmlu:79.3,ceval:87.4,mtbench:7.91,priceIn:0.18,priceOut:0.5,highlight:"最新蒸馏数学专项14B轻量化模型",domestic:true},
+  {rank:30,name:"星火V4 Turbo",vendor:"科大讯飞",opensource:"否",context:"64K",multimodal:"是",mmlu:77.2,ceval:83.5,mtbench:7.85,priceIn:0.32,priceOut:1.2,highlight:"讯飞最新离线语音车载专用模型",domestic:true},
+  {rank:31,name:"InternLM2.5 7B Chat",vendor:"上海AI实验室",opensource:"Apache2.0",context:"128K",multimodal:"是",mmlu:76.7,ceval:84.2,mtbench:7.78,priceIn:0.16,priceOut:0.45,highlight:"书生最新7B低配本地部署开源模型",domestic:true},
+  {rank:32,name:"Gemini 3.5 Flash",vendor:"Google",opensource:"否",context:"1M",multimodal:"是",mmlu:83.6,ceval:70.5,mtbench:7.66,priceIn:1.2,priceOut:4.5,highlight:"谷歌最新高速批量多模态轻量商用版",domestic:false},
+  {rank:33,name:"Baichuan-13B Chat",vendor:"百川智能",opensource:"Apache2.0",context:"64K",multimodal:"是",mmlu:75.4,ceval:82.6,mtbench:7.55,priceIn:0.12,priceOut:0.38,highlight:"百川最新13B通用开源模型",domestic:true},
+  {rank:34,name:"Mistral 7B v0.4",vendor:"Mistral",opensource:"Apache2.0",context:"32K",multimodal:"否",mmlu:68.3,ceval:55.7,mtbench:7.48,priceIn:0.09,priceOut:0.26,highlight:"Mistral最新7B极小通用开源基座",domestic:false},
+  {rank:35,name:"Qwen3-4B Instruct",vendor:"阿里",opensource:"Apache2.0",context:"256K",multimodal:"是",mmlu:78.3,ceval:81.6,mtbench:7.42,priceIn:0.08,priceOut:0.22,highlight:"Qwen3最新4B手机端离线多模态模型",domestic:true},
+  {rank:36,name:"Llama 3.1 8B Instruct",vendor:"Meta",opensource:"商用受限",context:"128K",multimodal:"否",mmlu:73.0,ceval:58.4,mtbench:7.36,priceIn:0.15,priceOut:0.42,highlight:"Meta最新8B入门开源微调模型",domestic:false},
+  {rank:37,name:"GLM-4 Air",vendor:"智谱AI",opensource:"否",context:"128K",multimodal:"是",mmlu:76.5,ceval:83.1,mtbench:7.30,priceIn:0.22,priceOut:0.7,highlight:"智谱最新平价客服商用模型",domestic:true},
+  {rank:38,name:"DeepSeek V2 Lite",vendor:"深度求索",opensource:"MIT开源",context:"64K",multimodal:"否",mmlu:74.8,ceval:82.3,mtbench:7.25,priceIn:0.07,priceOut:0.18,highlight:"深度求索最新批量文本清洗轻量开源",domestic:true},
+  {rank:39,name:"Grok 4 Base",vendor:"xAI",opensource:"否",context:"1M",multimodal:"是",mmlu:85.2,ceval:66.3,mtbench:7.12,priceIn:1.2,priceOut:5.8,highlight:"Grok4无增强思考标准版，当前最新基础版",domestic:false},
+  {rank:40,name:"MiniMax Omni Light",vendor:"稀宇科技",opensource:"否",context:"64K",multimodal:"是",mmlu:74.3,ceval:81.2,mtbench:7.00,priceIn:0.25,priceOut:0.8,highlight:"MiniMax最新轻量化数字人商用模型",domestic:true},
+  {rank:41,name:"360智脑4.0 Lite",vendor:"三六零",opensource:"否",context:"64K",multimodal:"是",mmlu:72.5,ceval:80.1,mtbench:6.88,priceIn:0.15,priceOut:0.4,highlight:"360最新内网轻量化安全问答模型",domestic:true},
+  {rank:42,name:"MiniCPM-V4.6",vendor:"面壁智能",opensource:"Apache2.0",context:"128K",multimodal:"是",mmlu:74.1,ceval:83.4,mtbench:6.82,priceIn:0.05,priceOut:0.12,highlight:"清华最新移动端端侧多模态开源",domestic:true},
+  {rank:43,name:"SeaLLM-13B-v2",vendor:"Sea集团",opensource:"Apache2.0",context:"64K",multimodal:"否",mmlu:73.6,ceval:79.5,mtbench:6.75,priceIn:0.10,priceOut:0.28,highlight:"Sea最新东南亚多语言13B开源",domestic:false},
+  {rank:44,name:"豆包2.1 Max",vendor:"字节跳动",opensource:"否",context:"128K",multimodal:"是",mmlu:76.2,ceval:84.5,mtbench:6.70,priceIn:0.30,priceOut:0.9,highlight:"豆包当前最新主模型",domestic:true},
+  {rank:45,name:"Mistral Ministral 14B",vendor:"Mistral",opensource:"Apache2.0",context:"128K",multimodal:"是",mmlu:72.8,ceval:58.6,mtbench:6.64,priceIn:0.24,priceOut:0.72,highlight:"Mistral最新中端14B本地合规模型",domestic:false},
+  {rank:46,name:"Phi-3 Small 7B",vendor:"微软",opensource:"MIT开源",context:"128K",multimodal:"否",mmlu:71.5,ceval:64.2,mtbench:6.59,priceIn:0.12,priceOut:0.35,highlight:"微软Phi3系列最新7B轻量开源",domestic:false},
+  {rank:47,name:"Baichuan2 7B Chat",vendor:"百川智能",opensource:"Apache2.0",context:"64K",multimodal:"是",mmlu:70.9,ceval:81.3,mtbench:6.52,priceIn:0.06,priceOut:0.16,highlight:"百川最新7B入门文史开源模型",domestic:true},
+  {rank:48,name:"Kimi-Dev-72B",vendor:"月之暗面",opensource:"Apache2.0",context:"2M",multimodal:"是",mmlu:78.4,ceval:87.0,mtbench:6.46,priceIn:0.40,priceOut:1.3,highlight:"Kimi最新开源长文档代码模型",domestic:true},
+  {rank:49,name:"MiMo Lite 8B",vendor:"小米",opensource:"否",context:"256K",multimodal:"是",mmlu:72.3,ceval:82.8,mtbench:6.41,priceIn:0.18,priceOut:0.55,highlight:"小米最新设备端内置轻量商用模型",domestic:true},
+  {rank:50,name:"Gemma 2 9B IT",vendor:"Google",opensource:"Gemma协议",context:"80K",multimodal:"是",mmlu:70.6,ceval:60.5,mtbench:6.35,priceIn:0.22,priceOut:0.68,highlight:"Gemma2最新9B图文开源模型",domestic:false},
+  {rank:51,name:"DeepSeek-R1 Base 7B",vendor:"深度求索",opensource:"MIT开源",context:"64K",multimodal:"否",mmlu:71.8,ceval:84.1,mtbench:6.28,priceIn:0.05,priceOut:0.13,highlight:"R1系列最新7B轻量化数学基座",domestic:true},
+  {rank:52,name:"InternLM XGen 4B",vendor:"上海AI实验室",opensource:"Apache2.0",context:"32K",multimodal:"否",mmlu:69.7,ceval:79.1,mtbench:6.05,priceIn:0.04,priceOut:0.10,highlight:"书生最新4B嵌入式纯文本开源",domestic:true},
+  {rank:53,name:"Minerva 7B",vendor:"Sapienza大学",opensource:"Apache2.0",context:"64K",multimodal:"否",mmlu:69.2,ceval:56.3,mtbench:5.98,priceIn:0.08,priceOut:0.20,highlight:"欧洲最新政务专用开源模型",domestic:false},
+  {rank:54,name:"文心4.0 Mini",vendor:"百度",opensource:"否",context:"32K",multimodal:"是",mmlu:69.5,ceval:80.0,mtbench:5.92,priceIn:0.09,priceOut:0.28,highlight:"文心5.1同代最新低成本图文轻量版",domestic:true},
+  {rank:55,name:"Mistral Tiny 3B",vendor:"Mistral",opensource:"Apache2.0",context:"8K",multimodal:"否",mmlu:65.4,ceval:53.2,mtbench:5.79,priceIn:0.03,priceOut:0.08,highlight:"Mistral最新3B超轻边缘开源",domestic:false},
+  {rank:56,name:"SeaLLM-7B-v2",vendor:"Sea集团",opensource:"Apache2.0",context:"32K",multimodal:"否",mmlu:67.9,ceval:78.6,mtbench:5.67,priceIn:0.06,priceOut:0.17,highlight:"东南亚最新7B轻量化翻译开源",domestic:false},
+  {rank:57,name:"MiniMax M1 Open",vendor:"稀宇科技",opensource:"MIT开源",context:"128K",multimodal:"否",mmlu:73.2,ceval:82.1,mtbench:5.60,priceIn:0.14,priceOut:0.40,highlight:"MiniMax最新可本地微调开源基座",domestic:true},
+  {rank:58,name:"Gemini 3 Nano",vendor:"Google",opensource:"否",context:"32K",multimodal:"是",mmlu:72.0,ceval:67.4,mtbench:5.54,priceIn:0.10,priceOut:0.30,highlight:"谷歌最新手机端离线内置多模态模型",domestic:false},
+  {rank:59,name:"GPT-4 Mini",vendor:"OpenAI",opensource:"否",context:"128K",multimodal:"是",mmlu:84.5,ceval:71.6,mtbench:5.42,priceIn:0.15,priceOut:0.60,highlight:"OpenAI当前唯一在售平价轻量化多模态",domestic:false},
+  {rank:60,name:"Baichuan 4 7B",vendor:"百川智能",opensource:"Apache2.0",context:"64K",multimodal:"是",mmlu:67.1,ceval:78.9,mtbench:5.36,priceIn:0.05,priceOut:0.13,highlight:"Baichuan4系列最新7B私有化轻量开源",domestic:true},
+  {rank:61,name:"Qwen3-2B Tiny",vendor:"阿里",opensource:"Apache2.0",context:"128K",multimodal:"是",mmlu:66.8,ceval:77.5,mtbench:5.29,priceIn:0.03,priceOut:0.07,highlight:"Qwen3最新2B物联网车载微型多模态",domestic:true},
+  {rank:62,name:"Phi-2 2.7B",vendor:"微软",opensource:"MIT开源",context:"32K",multimodal:"否",mmlu:66.2,ceval:62.5,mtbench:5.17,priceIn:0.02,priceOut:0.06,highlight:"微软当前2.7B极限轻量稳定开源",domestic:false},
+  {rank:63,name:"InternLM2 4B",vendor:"上海AI实验室",opensource:"Apache2.0",context:"32K",multimodal:"是",mmlu:65.9,ceval:77.2,mtbench:5.10,priceIn:0.03,priceOut:0.09,highlight:"书生最新4B端侧图文OCR开源",domestic:true},
+  {rank:64,name:"Claude Haiku 4.5",vendor:"Anthropic",opensource:"否",context:"200K",multimodal:"是",mmlu:83.0,ceval:71.0,mtbench:5.05,priceIn:0.25,priceOut:1.25,highlight:"Claude最新平价批量文档轻量商用模型",domestic:false},
+  {rank:65,name:"百川Baichuan3 Mini",vendor:"百川智能",opensource:"否",context:"32K",multimodal:"是",mmlu:66.1,ceval:77.8,mtbench:4.86,priceIn:0.08,priceOut:0.24,highlight:"百川最新中小企业私有化轻量商用",domestic:true},
+  {rank:66,name:"DeepSeek Code 7B",vendor:"深度求索",opensource:"MIT开源",context:"64K",multimodal:"否",mmlu:69.4,ceval:80.7,mtbench:4.79,priceIn:0.06,priceOut:0.15,highlight:"最新轻量化专用代码生成开源模型",domestic:true},
+  {rank:67,name:"MiMo Tiny 4B",vendor:"小米",opensource:"否",context:"128K",multimodal:"是",mmlu:65.7,ceval:77.0,mtbench:4.73,priceIn:0.06,priceOut:0.18,highlight:"小米IoT智能家居最新内置4B模型",domestic:true},
+  {rank:68,name:"豆包Lite 1.5B",vendor:"字节跳动",opensource:"否",context:"32K",multimodal:"否",mmlu:64.9,ceval:76.6,mtbench:4.60,priceIn:"免费",priceOut:"免费",highlight:"豆包最新免费手机轻对话模型",domestic:true},
+  {rank:69,name:"SeaLLM Base 4B",vendor:"Sea集团",opensource:"Apache2.0",context:"16K",multimodal:"否",mmlu:64.5,ceval:75.9,mtbench:4.54,priceIn:0.03,priceOut:0.09,highlight:"东南亚4B低端设备专用翻译开源",domestic:false},
+  {rank:70,name:"360智脑4.0 Base",vendor:"三六零",opensource:"Apache2.0",context:"64K",multimodal:"是",mmlu:64.2,ceval:76.3,mtbench:4.47,priceIn:0.04,priceOut:0.11,highlight:"360最新安全检测开源基座",domestic:true},
+  {rank:71,name:"MiniCPM 2B",vendor:"面壁智能",opensource:"Apache2.0",context:"32K",multimodal:"否",mmlu:63.8,ceval:75.4,mtbench:4.41,priceIn:0.02,priceOut:0.05,highlight:"清华最新2B隐私离线纯文本端侧模型",domestic:true},
+  {rank:72,name:"DeepSeek V4 Tiny 2B",vendor:"深度求索",opensource:"MIT开源",context:"32K",multimodal:"否",mmlu:62.9,ceval:74.5,mtbench:3.97,priceIn:0.02,priceOut:0.06,highlight:"V4系列最新2B超低价批量文本过滤模型",domestic:true},
+  {rank:73,name:"Phi-4 Nano 1.3B",vendor:"微软",opensource:"MIT开源",context:"16K",multimodal:"否",mmlu:62.2,ceval:61.3,mtbench:3.78,priceIn:0.01,priceOut:0.03,highlight:"微软最新穿戴设备微型开源模型",domestic:false},
+  {rank:74,name:"InternLM XGen 2B",vendor:"上海AI实验室",opensource:"Apache2.0",context:"16K",multimodal:"否",mmlu:61.8,ceval:73.6,mtbench:3.71,priceIn:0.02,priceOut:0.05,highlight:"书生最低显存2B嵌入式纯文本模型",domestic:true},
+  {rank:75,name:"Baichuan 2 4B",vendor:"百川智能",opensource:"Apache2.0",context:"32K",multimodal:"是",mmlu:61.5,ceval:73.2,mtbench:3.65,priceIn:0.03,priceOut:0.08,highlight:"百川最新4B本地简易知识库开源",domestic:true},
+  {rank:76,name:"Qwen1.8 1.8B Tiny",vendor:"阿里",opensource:"Apache2.0",context:"64K",multimodal:"是",mmlu:61.2,ceval:72.8,mtbench:3.59,priceIn:0.01,priceOut:0.03,highlight:"阿里最新智能音箱离线极简多模态",domestic:true},
+  {rank:77,name:"SeaLLM Tiny 2B",vendor:"Sea集团",opensource:"Apache2.0",context:"8K",multimodal:"否",mmlu:60.8,ceval:72.5,mtbench:3.46,priceIn:0.02,priceOut:0.05,highlight:"东南亚2B低端硬件多语言微型模型",domestic:false},
+  {rank:78,name:"DeepSeek Math 1.3B",vendor:"深度求索",opensource:"MIT开源",context:"16K",multimodal:"否",mmlu:60.0,ceval:71.9,mtbench:3.27,priceIn:0.01,priceOut:0.03,highlight:"最新极简题库批改专用数学小模型",domestic:true},
+  {rank:79,name:"MiMo Tiny 2B",vendor:"小米",opensource:"Apache2.0",context:"64K",multimodal:"否",mmlu:59.7,ceval:71.6,mtbench:3.21,priceIn:0.02,priceOut:0.06,highlight:"小米开源IoT本地调度2B轻模型",domestic:true},
+  {rank:80,name:"MiniCPM-V 1B",vendor:"面壁智能",opensource:"Apache2.0",context:"16K",multimodal:"是",mmlu:59.4,ceval:71.2,mtbench:3.14,priceIn:0.01,priceOut:0.03,highlight:"1B极限手机离线识图极简OCR模型",domestic:true}
+];
+
+let filteredData = [...data];
+let currentSort = { field: 'rank', asc: true };
+
+function getTier(mtbench) {
+  if (mtbench >= 9.0) return 'T0';
+  if (mtbench >= 8.3) return 'T1';
+  if (mtbench >= 7.5) return 'T2';
+  if (mtbench >= 6.0) return 'T3';
+  return 'T4';
+}
+
+function getOpensourceBadgeClass(status) {
+  if (status.includes('开源') && !status.includes('部分') && !status.includes('受限')) return 'badge-opensource';
+  if (status === '否' || status === '闭源商用') return 'badge-closed';
+  if (status === '部分开源') return 'badge-partial';
+  if (status === '商用受限') return 'badge-restricted';
+  return 'badge-closed';
+}
+
+function getMultimodalBadgeClass(val) {
+  if (val === '是') return 'badge-yes';
+  if (val === '否') return 'badge-no';
+  return 'badge-optional';
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  filteredData.forEach((item, index) => {
+    const tier = getTier(item.mtbench);
+    const rankClass = item.rank <= 3 ? `rank-${item.rank}` : '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="rank ${rankClass}">${item.rank}</td>
+      <td>
+        <div class="model-name">${item.name}</div>
+        <span class="badge badge-${tier.toLowerCase()}">${tier}</span>
+      </td>
+      <td><span class="vendor">${item.vendor}</span></td>
+      <td><span class="badge ${getOpensourceBadgeClass(item.opensource)}">${item.opensource}</span></td>
+      <td class="score">${item.context}</td>
+      <td><span class="badge ${getMultimodalBadgeClass(item.multimodal)}">${item.multimodal}</span></td>
+      <td class="score">${item.mmlu}</td>
+      <td class="score">${item.ceval}</td>
+      <td class="score"><strong>${item.mtbench}</strong></td>
+      <td class="price">$${item.priceIn}</td>
+      <td class="price">$${item.priceOut}</td>
+      <td class="highlight">${item.highlight}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateStats();
+  updateSortIndicators();
+}
+
+function updateStats() {
+  document.getElementById('totalCount').textContent = filteredData.length;
+  document.getElementById('domesticCount').textContent = filteredData.filter(d => d.domestic).length;
+  document.getElementById('opensourceCount').textContent = filteredData.filter(d => 
+    d.opensource.includes('开源') && !d.opensource.includes('部分') && !d.opensource.includes('受限')
+  ).length;
+  document.getElementById('multimodalCount').textContent = filteredData.filter(d => d.multimodal === '是').length;
+}
+
+function updateSortIndicators() {
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.sort === currentSort.field) {
+      th.classList.add(currentSort.asc ? 'sort-asc' : 'sort-desc');
+    }
+  });
+}
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const opensourceFilter = document.getElementById('opensourceFilter').value;
+  const multimodalFilter = document.getElementById('multimodalFilter').value;
+  const tierFilter = document.getElementById('tierFilter').value;
+
+  filteredData = data.filter(item => {
+    if (search && !item.name.toLowerCase().includes(search) && !item.vendor.toLowerCase().includes(search)) {
+      return false;
+    }
+    if (opensourceFilter !== 'all') {
+      if (opensourceFilter === '闭源' && item.opensource !== '否' && item.opensource !== '闭源商用') return false;
+      if (opensourceFilter === '开源' && !item.opensource.includes('开源') && !item.opensource.includes('Apache') && !item.opensource.includes('MIT') && !item.opensource.includes('Gemma')) return false;
+      if (opensourceFilter === '商用受限' && item.opensource !== '商用受限') return false;
+    }
+    if (multimodalFilter !== 'all' && item.multimodal !== multimodalFilter) {
+      return false;
+    }
+    if (tierFilter !== 'all') {
+      const tier = getTier(item.mtbench);
+      if (tier !== tierFilter) return false;
+    }
+    return true;
+  });
+
+  sortData();
+}
+
+function sortData() {
+  const field = currentSort.field;
+  const asc = currentSort.asc;
+
+  filteredData.sort((a, b) => {
+    let valA = a[field];
+    let valB = b[field];
+
+    if (typeof valA === 'string' && !isNaN(parseFloat(valA))) {
+      valA = parseFloat(valA);
+      valB = parseFloat(valB);
+    }
+
+    if (typeof valA === 'number') {
+      return asc ? valA - valB : valB - valA;
+    }
+    return asc ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
+  });
+
+  renderTable();
+}
+
+// 事件监听
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('opensourceFilter').addEventListener('change', applyFilters);
+document.getElementById('multimodalFilter').addEventListener('change', applyFilters);
+document.getElementById('tierFilter').addEventListener('change', applyFilters);
+
+document.querySelectorAll('th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const field = th.dataset.sort;
+    if (currentSort.field === field) {
+      currentSort.asc = !currentSort.asc;
+    } else {
+      currentSort.field = field;
+      currentSort.asc = field === 'rank' || field === 'mtbench' ? false : true;
+    }
+    sortData();
+  });
+});
+
+// 主题切换
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌓';
+
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  themeToggle.textContent = next === 'dark' ? '☀️' : '🌓';
+});
+
+// 初始化
+renderTable();
+</script>
+</body>
+</html>
